@@ -21,40 +21,39 @@ namespace ModTemp
 
         void OnEnable()
         {
+            GorillaLocomotion.Player.Instance.bodyCollider.attachedRigidbody.AddForce(Vector3.up * (Time.deltaTime * (9.81f / Time.deltaTime)), ForceMode.Acceleration);
             HarmonyPatches.ApplyHarmonyPatches();
         }
 
         void OnDisable()
         {
             HarmonyPatches.RemoveHarmonyPatches();
+            GorillaLocomotion.Player.Instance.bodyCollider.attachedRigidbody.AddForce(Vector3.up * (Time.deltaTime * (1.0f / Time.deltaTime)), ForceMode.Acceleration);
         }
 
         void OnGameInitialized(object sender, EventArgs e)
         {
         }
-
+        
         void Update()
         {
+            bool flag = this.inRoom;
+            if (flag)
+            {
+                GorillaLocomotion.Player.Instance.bodyCollider.attachedRigidbody.AddForce(Vector3.up * (Time.deltaTime * (9.81f / Time.deltaTime)), ForceMode.Acceleration);
+            }
         }
 
         [ModdedGamemodeJoin]
         public void OnJoin(string gamemode)
         {
-            {
-                GorillaLocomotion.Player.Instance.bodyCollider.attachedRigidbody.AddForce(Vector3.up * (Time.deltaTime * (9.81f / Time.deltaTime)), ForceMode.Acceleration);
-            }
-
-            inRoom = true;
+            this.inRoom = true;
         }
 
         [ModdedGamemodeLeave]
         public void OnLeave(string gamemode)
         {
-            {
-                GorillaLocomotion.Player.Instance.bodyCollider.attachedRigidbody.AddForce(Vector3.up * (Time.deltaTime * (1.0f / Time.deltaTime)), ForceMode.Acceleration);
-            }
-
-            inRoom = false;
+            this.inRoom = false;
         }
     }
 }
